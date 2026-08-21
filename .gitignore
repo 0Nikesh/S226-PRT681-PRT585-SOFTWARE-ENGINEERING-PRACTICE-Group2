@@ -1,0 +1,63 @@
+## Visual Studio / .NET Core
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build outputs & temporary files
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+[Tt]emp/
+[Tt]mp/
+build/
+dist/
+out/
+publish/
+
+# Visual Studio files
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.vsp
+*.vspx
+*.sap
+
+# JetBrains Rider & ReSharper
+.idea/
+*.sln.iml
+_ReSharper*/
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# User-specific & local configuration files
+appsettings.Development.json
+appsettings.Local.json
+*.local.json
+secrets.json
+
+# Entity Framework & Database files
+*.db
+*.sqlite
+*.sqlite3
+*.ldf
+*.mdf
+
+# Package manager folders
+.nuget/
+packages/
+*.nupkg
+node_modules/
+
+# Operating System specific files
+.DS_Store
+Thumbs.db
+desktop.ini

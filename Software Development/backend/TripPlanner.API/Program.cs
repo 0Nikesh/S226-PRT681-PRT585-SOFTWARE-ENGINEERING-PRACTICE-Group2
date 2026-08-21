@@ -19,34 +19,30 @@ var connectionString =
         "DefaultConnection"
     );
 
-builder.Services.AddDbContext<ApplicationDbContext>(
-    options =>
-    {
-        options.UseMySql(
-            connectionString,
-            ServerVersion.AutoDetect(connectionString)
-        );
-    }
-);
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseMySql(
+        connectionString,
+        ServerVersion.AutoDetect(connectionString)
+    );
+});
 
 
 // ============================================
-// IDENTITY
+// ASP.NET IDENTITY
 // ============================================
 
 builder.Services
-    .AddIdentity<ApplicationUser, IdentityRole>(
-        options =>
-        {
-            options.Password.RequireDigit = true;
-            options.Password.RequireLowercase = true;
-            options.Password.RequireUppercase = true;
-            options.Password.RequireNonAlphanumeric = false;
-            options.Password.RequiredLength = 6;
+    .AddIdentity<ApplicationUser, IdentityRole>(options =>
+    {
+        options.Password.RequireDigit = true;
+        options.Password.RequireLowercase = true;
+        options.Password.RequireUppercase = true;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequiredLength = 6;
 
-            options.User.RequireUniqueEmail = true;
-        }
-    )
+        options.User.RequireUniqueEmail = true;
+    })
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
@@ -72,11 +68,8 @@ builder.Services
             new TokenValidationParameters
             {
                 ValidateIssuer = true,
-
                 ValidateAudience = true,
-
                 ValidateLifetime = true,
-
                 ValidateIssuerSigningKey = true,
 
                 ValidIssuer =
@@ -94,7 +87,7 @@ builder.Services
 
 
 // ============================================
-// SERVICES
+// JWT SERVICE
 // ============================================
 
 builder.Services.AddScoped<JwtService>();
@@ -131,11 +124,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
+// ============================================
+// BUILD APPLICATION
+// ============================================
+
 var app = builder.Build();
 
 
 // ============================================
-// MIDDLEWARE
+// SWAGGER
 // ============================================
 
 if (app.Environment.IsDevelopment())
@@ -143,6 +140,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
+// ============================================
+// MIDDLEWARE
+// ============================================
 
 app.UseHttpsRedirection();
 
@@ -161,9 +163,7 @@ app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
-    var services = scope.ServiceProvider;
-
-    await SeedAdminAsync(services);
+    await SeedAdminAsync(scope.ServiceProvider);
 }
 
 
@@ -184,7 +184,10 @@ static async Task SeedAdminAsync(
         services.GetRequiredService<UserManager<ApplicationUser>>();
 
 
-    // Create Admin role
+    // ----------------------------------------
+    // Create Admin Role
+    // ----------------------------------------
+
     if (!await roleManager.RoleExistsAsync("Admin"))
     {
         await roleManager.CreateAsync(
@@ -193,7 +196,10 @@ static async Task SeedAdminAsync(
     }
 
 
-    // Create User role
+    // ----------------------------------------
+    // Create User Role
+    // ----------------------------------------
+
     if (!await roleManager.RoleExistsAsync("User"))
     {
         await roleManager.CreateAsync(
@@ -202,7 +208,10 @@ static async Task SeedAdminAsync(
     }
 
 
-    // Admin details
+    // ----------------------------------------
+    // Create Admin Account
+    // ----------------------------------------
+
     var adminEmail = "admin@tripplanner.com";
     var adminPassword = "Admin@123456";
 
@@ -223,10 +232,11 @@ static async Task SeedAdminAsync(
         };
 
 
-        var result = await userManager.CreateAsync(
-            admin,
-            adminPassword
-        );
+        var result =
+            await userManager.CreateAsync(
+                admin,
+                adminPassword
+            );
 
 
         if (result.Succeeded)

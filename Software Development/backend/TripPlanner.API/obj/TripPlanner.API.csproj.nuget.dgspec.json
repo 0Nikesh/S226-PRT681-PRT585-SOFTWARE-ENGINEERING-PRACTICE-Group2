@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\NestedDisk\\Semester_3\\Software_Engineering_Practise\\SoftwareEngineeringPractise\\backend\\TripPlanner.API\\TripPlanner.API.csproj": {}
+    "C:\\NestedDisk\\Semester_3\\Software_Engineering_Practise\\SoftwareEngineeringPractise\\Software Development\\backend\\TripPlanner.API\\TripPlanner.API.csproj": {}
   },
   "projects": {
-    "C:\\NestedDisk\\Semester_3\\Software_Engineering_Practise\\SoftwareEngineeringPractise\\backend\\TripPlanner.API\\TripPlanner.API.csproj": {
+    "C:\\NestedDisk\\Semester_3\\Software_Engineering_Practise\\SoftwareEngineeringPractise\\Software Development\\backend\\TripPlanner.API\\TripPlanner.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\NestedDisk\\Semester_3\\Software_Engineering_Practise\\SoftwareEngineeringPractise\\backend\\TripPlanner.API\\TripPlanner.API.csproj",
+        "projectUniqueName": "C:\\NestedDisk\\Semester_3\\Software_Engineering_Practise\\SoftwareEngineeringPractise\\Software Development\\backend\\TripPlanner.API\\TripPlanner.API.csproj",
         "projectName": "TripPlanner.API",
-        "projectPath": "C:\\NestedDisk\\Semester_3\\Software_Engineering_Practise\\SoftwareEngineeringPractise\\backend\\TripPlanner.API\\TripPlanner.API.csproj",
+        "projectPath": "C:\\NestedDisk\\Semester_3\\Software_Engineering_Practise\\SoftwareEngineeringPractise\\Software Development\\backend\\TripPlanner.API\\TripPlanner.API.csproj",
         "packagesPath": "C:\\Users\\waste\\.nuget\\packages\\",
-        "outputPath": "C:\\NestedDisk\\Semester_3\\Software_Engineering_Practise\\SoftwareEngineeringPractise\\backend\\TripPlanner.API\\obj\\",
+        "outputPath": "C:\\NestedDisk\\Semester_3\\Software_Engineering_Practise\\SoftwareEngineeringPractise\\Software Development\\backend\\TripPlanner.API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

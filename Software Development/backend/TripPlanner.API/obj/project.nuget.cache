@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "NI8uYBKcMBU=",
+  "dgSpecHash": "kAjXXRiubtc=",
   "success": true,
-  "projectFilePath": "C:\\NestedDisk\\Semester_3\\Software_Engineering_Practise\\SoftwareEngineeringPractise\\backend\\TripPlanner.API\\TripPlanner.API.csproj",
+  "projectFilePath": "C:\\NestedDisk\\Semester_3\\Software_Engineering_Practise\\SoftwareEngineeringPractise\\Software Development\\backend\\TripPlanner.API\\TripPlanner.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\waste\\.nuget\\packages\\google.apis\\1.70.0\\google.apis.1.70.0.nupkg.sha512",
     "C:\\Users\\waste\\.nuget\\packages\\google.apis.auth\\1.70.0\\google.apis.auth.1.70.0.nupkg.sha512",

@@ -1,0 +1,61 @@
+Week,StudentId,Name,Day,Hours,Hour,Activity details
+Week-1,S394867,Susmit Sharma,Day 1,1,Hour 1,"Reviewed the Week 1 project instructions, group responsibilities and expected Business Analyst deliverables."
+Week-1,S394867,Susmit Sharma,Day 1,1,Hour 2,"Joined the group discussion and clarified the project problem, target users and initial business objectives."
+Week-1,S394867,Susmit Sharma,Day 1,1,Hour 3,Researched the business problem and similar existing solutions to understand the current situation and project context.
+Week-1,S394867,Susmit Sharma,Day 1,1,Hour 4,"Identified key stakeholders and recorded their likely needs, expectations and level of influence."
+Week-1,S394867,Susmit Sharma,Day 1,1,Hour 5,Drafted initial business requirements and separated functional requirements from non-functional requirements.
+Week-1,S394867,Susmit Sharma,Day 1,1,Hour 6,Organised the initial BA notes in the shared repository and reviewed the work with the group.
+Week-1,S394867,Susmit Sharma,Day 2,1,Hour 1,Reviewed the agreed project scope and identified what should be included and excluded from the solution.
+Week-1,S394867,Susmit Sharma,Day 2,1,Hour 2,Prepared stakeholder notes and mapped the main stakeholders to their responsibilities and interests.
+Week-1,S394867,Susmit Sharma,Day 2,1,Hour 3,Conducted requirements-gathering preparation and created questions for the next team discussion.
+Week-1,S394867,Susmit Sharma,Day 2,1,Hour 4,Converted stakeholder needs into clear and testable user requirements.
+Week-1,S394867,Susmit Sharma,Day 2,1,Hour 5,Drafted initial user stories with simple acceptance criteria for the main system functions.
+Week-1,S394867,Susmit Sharma,Day 2,1,Hour 6,Updated the requirements document and checked that the requirements were consistent with the project objectives.
+Week-1,S394867,Susmit Sharma,Day 3,1,Hour 1,"Reviewed the current business process and documented the main steps, users and information involved."
+Week-1,S394867,Susmit Sharma,Day 3,1,Hour 2,Created an initial As-Is process description and identified pain points and areas for improvement.
+Week-1,S394867,Susmit Sharma,Day 3,1,Hour 3,Discussed the process findings with group members and collected feedback on missing steps.
+Week-1,S394867,Susmit Sharma,Day 3,1,Hour 4,Developed a high-level To-Be process showing how the proposed solution could improve the current process.
+Week-1,S394867,Susmit Sharma,Day 3,1,Hour 5,Reviewed the To-Be process against the identified business needs and requirements.
+Week-1,S394867,Susmit Sharma,Day 3,1,Hour 6,Saved the updated process documentation and recorded changes made from the team discussion.
+Week-1,S394867,Susmit Sharma,Day 4,1,Hour 1,Reviewed the user stories and checked whether each story had a clear business purpose.
+Week-1,S394867,Susmit Sharma,Day 4,1,Hour 2,Refined acceptance criteria so that the expected outcome could be understood by developers and testers.
+Week-1,S394867,Susmit Sharma,Day 4,1,Hour 3,"Prioritised requirements into essential, important and lower-priority items for the project."
+Week-1,S394867,Susmit Sharma,Day 4,1,Hour 4,"Checked requirements for duplication, ambiguity, missing information and conflicting expectations."
+Week-1,S394867,Susmit Sharma,Day 4,1,Hour 5,Discussed requirement priorities and dependencies with the group.
+Week-1,S394867,Susmit Sharma,Day 4,1,Hour 6,Prepared a cleaned-up requirements list for the next stage of development and testing.
+Week-1,S394867,Susmit Sharma,Day 5,1,Hour 1,Reviewed all Week 1 BA documents and compared them with the project brief.
+Week-1,S394867,Susmit Sharma,Day 5,1,Hour 2,"Checked stakeholder, scope, process and requirement documentation for consistency."
+Week-1,S394867,Susmit Sharma,Day 5,1,Hour 3,Collected feedback from group members and updated the requirements where necessary.
+Week-1,S394867,Susmit Sharma,Day 5,1,Hour 4,Prepared a short requirements summary for the team to use during development.
+Week-1,S394867,Susmit Sharma,Day 5,1,Hour 5,"Organised BA evidence, notes and documents in the shared GitHub/OneNote workspace."
+Week-1,S394867,Susmit Sharma,Day 5,1,Hour 6,Completed a Week 1 review and documented outstanding BA tasks for Week 2.
+Week-2,S394867,Susmit Sharma,Day 1,1,Hour 1,Reviewed the Week 1 requirements and checked progress against the agreed project scope.
+Week-2,S394867,Susmit Sharma,Day 1,1,Hour 2,Met with group members to confirm changes to business requirements and newly identified user needs.
+Week-2,S394867,Susmit Sharma,Day 1,1,Hour 3,Updated user stories and acceptance criteria based on the latest team decisions.
+Week-2,S394867,Susmit Sharma,Day 1,1,Hour 4,Reviewed the proposed solution screens/workflows from a business-user perspective.
+Week-2,S394867,Susmit Sharma,Day 1,1,Hour 5,Identified gaps between the requirements and the proposed solution and documented them for the team.
+Week-2,S394867,Susmit Sharma,Day 1,1,Hour 6,Updated the requirements traceability notes and shared the changes with the group.
+Week-2,S394867,Susmit Sharma,Day 2,1,Hour 1,Reviewed the developed features against the original business requirements.
+Week-2,S394867,Susmit Sharma,Day 2,1,Hour 2,Prepared a requirement-to-feature mapping to check that important requirements were covered.
+Week-2,S394867,Susmit Sharma,Day 2,1,Hour 3,Analysed user feedback and identified improvements needed in the proposed workflow.
+Week-2,S394867,Susmit Sharma,Day 2,1,Hour 4,Discussed requirement issues and clarifications with the developer and tester team members.
+Week-2,S394867,Susmit Sharma,Day 2,1,Hour 5,Refined business rules and acceptance criteria for features under development.
+Week-2,S394867,Susmit Sharma,Day 2,1,Hour 6,Recorded decisions and requirement changes in the project documentation.
+Week-2,S394867,Susmit Sharma,Day 3,1,Hour 1,Reviewed the system workflow and identified business scenarios that should be demonstrated or tested.
+Week-2,S394867,Susmit Sharma,Day 3,1,Hour 2,Prepared positive and negative business scenarios from the end-user perspective.
+Week-2,S394867,Susmit Sharma,Day 3,1,Hour 3,Checked whether error messages and validation rules supported the stated business requirements.
+Week-2,S394867,Susmit Sharma,Day 3,1,Hour 4,Reviewed the tester's planned test coverage and identified any missing business scenarios.
+Week-2,S394867,Susmit Sharma,Day 3,1,Hour 5,Discussed defects and requirement-related issues with the group.
+Week-2,S394867,Susmit Sharma,Day 3,1,Hour 6,Updated acceptance criteria and requirement notes where defects revealed unclear requirements.
+Week-2,S394867,Susmit Sharma,Day 4,1,Hour 1,Reviewed the latest project build and compared implemented functions with the approved user stories.
+Week-2,S394867,Susmit Sharma,Day 4,1,Hour 2,Checked the main user journey from start to finish and recorded observations.
+Week-2,S394867,Susmit Sharma,Day 4,1,Hour 3,Verified that the highest-priority business requirements were represented in the current build.
+Week-2,S394867,Susmit Sharma,Day 4,1,Hour 4,Reviewed outstanding issues and helped prioritise defects that affected core business functions.
+Week-2,S394867,Susmit Sharma,Day 4,1,Hour 5,Updated the BA documentation to reflect approved changes to the solution.
+Week-2,S394867,Susmit Sharma,Day 4,1,Hour 6,Prepared notes for the group review and final project documentation.
+Week-2,S394867,Susmit Sharma,Day 5,1,Hour 1,"Completed a final review of the requirements, stakeholder notes and process documentation."
+Week-2,S394867,Susmit Sharma,Day 5,1,Hour 2,Checked the requirements traceability information against the latest project features and test results.
+Week-2,S394867,Susmit Sharma,Day 5,1,Hour 3,Reviewed unresolved requirements and confirmed actions with relevant group members.
+Week-2,S394867,Susmit Sharma,Day 5,1,Hour 4,Helped prepare the BA section of the project report and supporting evidence.
+Week-2,S394867,Susmit Sharma,Day 5,1,Hour 5,Organised final BA documents and ensured naming and version information were clear.
+Week-2,S394867,Susmit Sharma,Day 5,1,Hour 6,Completed the Week 2 BA timesheet review and recorded remaining tasks for the next project stage.

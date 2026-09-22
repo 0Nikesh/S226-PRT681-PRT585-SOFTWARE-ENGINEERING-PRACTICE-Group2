@@ -1,41 +1,31 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace TripPlanner.API.DTOs.Destinations
 {
-    public class CreateDestinationRequest
+    public class DestinationResponse
     {
-        [Required]
-        [StringLength(150)]
+        public int Id { get; set; }
+
         public string Name { get; set; } = string.Empty;
 
-        [Required]
-        [StringLength(100)]
         public string Country { get; set; } = string.Empty;
 
-        [Required]
-        [StringLength(100)]
         public string Continent { get; set; } = string.Empty;
 
-        [Range(1, 365)]
-        public int DestinationTime { get; set; } = 1;
+        public int DestinationTime { get; set; }
 
-        [Range(0, double.MaxValue)]
         public decimal MinPrice { get; set; }
 
-        [Range(0, double.MaxValue)]
         public decimal MaxPrice { get; set; }
 
-        [Range(0, int.MaxValue)]
+        public decimal AveragePricePerDay { get; set; }
+
         public int AverageVisitorsPerWeek { get; set; }
 
-        [Required]
-        [StringLength(40)]
         public string BestSeason { get; set; } = string.Empty;
 
-        [StringLength(1000)]
         public string Description { get; set; } = string.Empty;
 
-        [StringLength(500)]
         public string? ImageUrl { get; set; }
+
+        public DateTime CreatedAt { get; set; }
     }
 }

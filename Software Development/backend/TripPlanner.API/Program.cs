@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -9,16 +10,44 @@ using TripPlanner.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+if (builder.Environment.IsDevelopment())
+{
+    builder.Logging.ClearProviders();
+    builder.Logging.AddConsole();
+}
+
+// Store development keys with the project instead of using Windows keys owned by another account.
+if (builder.Environment.IsDevelopment())
+{
+    var keysDirectory = Path.Combine(builder.Environment.ContentRootPath, "App_Data", "DataProtection-Keys");
+    builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(keysDirectory));
+}
+
+// ============================================
+// LOAD .env FILE
+// ============================================
+
+DotNetEnv.Env.Load();
 
 // ============================================
 // DATABASE
 // ============================================
+// 1. Retrieve the connection string
 
 var connectionString =
     builder.Configuration.GetConnectionString(
         "DefaultConnection"
-    );
+    ) ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
+// 2. Replace ${DB_PASS} placeholder with the environment variable
+var dbPass = Environment.GetEnvironmentVariable("DB_PASS")
+    ?? throw new InvalidOperationException("DB_PASS environment variable not found. Check your .env file.");
+connectionString = connectionString.Replace("${DB_PASS}", dbPass);
+
+// 2. Detect the MySQL server version automatically
+var serverVersion = ServerVersion.AutoDetect(connectionString);
+
+// 3. Register the DbContext service
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseMySql(
@@ -26,6 +55,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         ServerVersion.AutoDetect(connectionString)
     );
 });
+
+
 
 
 // ============================================
@@ -148,6 +179,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+Directory.CreateDirectory(app.Environment.WebRootPath ?? Path.Combine(app.Environment.ContentRootPath, "wwwroot"));
+app.UseStaticFiles();
+
 app.UseCors("Frontend");
 
 app.UseAuthentication();
@@ -163,7 +197,10 @@ app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await db.Database.MigrateAsync();
     await SeedAdminAsync(scope.ServiceProvider);
+    await SeedDestinationsAsync(db);
 }
 
 
@@ -247,4 +284,113 @@ static async Task SeedAdminAsync(
             );
         }
     }
+}
+
+static async Task SeedDestinationsAsync(ApplicationDbContext db)
+{
+    var samples = new[]
+    {
+        new Destination
+        {
+            Name = "Sydney",
+            Country = "Australia",
+            Continent = "Oceania",
+            DestinationTime = 5,
+            MinPrice = 160,
+            MaxPrice = 280,
+            AverageVisitorsPerWeek = 42000,
+            BestSeason = "Summer",
+            Description = "Harbour walks, beaches, and city neighbourhoods."
+        },
+        new Destination
+        {
+            Name = "Melbourne",
+            Country = "Australia",
+            Continent = "Oceania",
+            DestinationTime = 4,
+            MinPrice = 140,
+            MaxPrice = 240,
+            AverageVisitorsPerWeek = 31000,
+            BestSeason = "Autumn",
+            Description = "Laneways, food, and coastal day trips."
+        },
+        new Destination
+        {
+            Name = "Cairns",
+            Country = "Australia",
+            Continent = "Oceania",
+            DestinationTime = 6,
+            MinPrice = 120,
+            MaxPrice = 220,
+            AverageVisitorsPerWeek = 18000,
+            BestSeason = "Winter",
+            Description = "Reef trips and rainforest escapes in the dry season."
+        },
+        new Destination
+        {
+            Name = "Perth",
+            Country = "Australia",
+            Continent = "Oceania",
+            DestinationTime = 4,
+            MinPrice = 130,
+            MaxPrice = 230,
+            AverageVisitorsPerWeek = 15000,
+            BestSeason = "Spring",
+            Description = "Beaches, parks, and sunny spring weather."
+        },
+        new Destination
+        {
+            Name = "Gold Coast",
+            Country = "Australia",
+            Continent = "Oceania",
+            DestinationTime = 5,
+            MinPrice = 110,
+            MaxPrice = 210,
+            AverageVisitorsPerWeek = 27000,
+            BestSeason = "Summer",
+            Description = "Surf beaches and theme parks along the coast."
+        },
+        new Destination
+        {
+            Name = "Hobart",
+            Country = "Australia",
+            Continent = "Oceania",
+            DestinationTime = 4,
+            MinPrice = 100,
+            MaxPrice = 190,
+            AverageVisitorsPerWeek = 8000,
+            BestSeason = "Summer",
+            Description = "Harbour views, markets, and nearby wilderness."
+        }
+    };
+
+    foreach (var sample in samples)
+    {
+        var existing = await db.Destinations.FirstOrDefaultAsync(destination =>
+            destination.Name == sample.Name && destination.Country == sample.Country);
+
+        sample.EstimatedCost = (sample.MinPrice + sample.MaxPrice) / 2m;
+
+        if (existing is null)
+        {
+            db.Destinations.Add(sample);
+            continue;
+        }
+
+        if (!string.IsNullOrWhiteSpace(existing.BestSeason))
+        {
+            continue;
+        }
+
+        existing.Continent = sample.Continent;
+        existing.DestinationTime = sample.DestinationTime;
+        existing.MinPrice = sample.MinPrice;
+        existing.MaxPrice = sample.MaxPrice;
+        existing.EstimatedCost = sample.EstimatedCost;
+        existing.AverageVisitorsPerWeek = sample.AverageVisitorsPerWeek;
+        existing.BestSeason = sample.BestSeason;
+        existing.Description = sample.Description;
+    }
+
+    await db.SaveChangesAsync();
 }

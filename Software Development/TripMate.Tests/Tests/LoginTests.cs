@@ -2,7 +2,7 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
-namespace TripMate.Tests
+namespace TripPlanner.Tests
 {
     public class LoginTests
     {
@@ -24,7 +24,7 @@ namespace TripMate.Tests
         {
             Assert.That(
                 driver.Title,
-                Does.Contain("TripMate")
+                Does.Contain("TripPlanner")
             );
         }
 

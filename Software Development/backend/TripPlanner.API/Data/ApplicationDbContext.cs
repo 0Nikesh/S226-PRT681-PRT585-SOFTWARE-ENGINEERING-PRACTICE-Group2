@@ -42,6 +42,15 @@ namespace TripPlanner.API.Data
                 .WithMany()
                 .HasForeignKey(rating => rating.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Destination>(entity =>
+            {
+                entity.Property(destination => destination.MinPrice).HasPrecision(18, 2);
+                entity.Property(destination => destination.MaxPrice).HasPrecision(18, 2);
+                entity.Property(destination => destination.BestSeason).HasMaxLength(40);
+                entity.Property(destination => destination.Description).HasMaxLength(1000);
+                entity.Property(destination => destination.ImageUrl).HasMaxLength(500);
+            });
         }
     }
 }

@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -9,16 +10,44 @@ using TripPlanner.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+if (builder.Environment.IsDevelopment())
+{
+    builder.Logging.ClearProviders();
+    builder.Logging.AddConsole();
+}
+
+// Store development keys with the project instead of using Windows keys owned by another account.
+if (builder.Environment.IsDevelopment())
+{
+    var keysDirectory = Path.Combine(builder.Environment.ContentRootPath, "App_Data", "DataProtection-Keys");
+    builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(keysDirectory));
+}
+
+// ============================================
+// LOAD .env FILE
+// ============================================
+
+DotNetEnv.Env.Load();
 
 // ============================================
 // DATABASE
 // ============================================
+// 1. Retrieve the connection string
 
 var connectionString =
     builder.Configuration.GetConnectionString(
         "DefaultConnection"
-    );
+    ) ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
+// 2. Replace ${DB_PASS} placeholder with the environment variable
+var dbPass = Environment.GetEnvironmentVariable("DB_PASS")
+    ?? throw new InvalidOperationException("DB_PASS environment variable not found. Check your .env file.");
+connectionString = connectionString.Replace("${DB_PASS}", dbPass);
+
+// 2. Detect the MySQL server version automatically
+var serverVersion = ServerVersion.AutoDetect(connectionString);
+
+// 3. Register the DbContext service
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseMySql(
@@ -26,6 +55,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         ServerVersion.AutoDetect(connectionString)
     );
 });
+
+
 
 
 // ============================================
@@ -147,6 +178,9 @@ if (app.Environment.IsDevelopment())
 // ============================================
 
 app.UseHttpsRedirection();
+
+Directory.CreateDirectory(app.Environment.WebRootPath ?? Path.Combine(app.Environment.ContentRootPath, "wwwroot"));
+app.UseStaticFiles();
 
 app.UseCors("Frontend");
 

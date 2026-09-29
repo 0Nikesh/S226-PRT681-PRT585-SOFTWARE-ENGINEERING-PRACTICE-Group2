@@ -128,79 +128,79 @@ namespace TripPlanner.API.Controllers
 
 
         // POST: api/auth/google
-        [HttpPost("google")]
-        public async Task<IActionResult> GoogleLogin(
-            GoogleLoginRequest request)
-        {
-            GoogleJsonWebSignature.Payload payload;
+        // [HttpPost("google")]
+        // public async Task<IActionResult> GoogleLogin(
+        //     GoogleLoginRequest request)
+        // {
+        //     GoogleJsonWebSignature.Payload payload;
 
-            try
-            {
-                payload = await GoogleJsonWebSignature
-                    .ValidateAsync(
-                        request.IdToken,
-                        new GoogleJsonWebSignature.ValidationSettings
-                        {
-                            Audience = new[]
-                            {
-                                _configuration["Google:ClientId"]
-                            }
-                        }
-                    );
-            }
-            catch
-            {
-                return Unauthorized(new
-                {
-                    message = "Invalid Google token."
-                });
-            }
+        //     try
+        //     {
+        //         payload = await GoogleJsonWebSignature
+        //             .ValidateAsync(
+        //                 request.IdToken,
+        //                 new GoogleJsonWebSignature.ValidationSettings
+        //                 {
+        //                     Audience = new[]
+        //                     {
+        //                         _configuration["Google:ClientId"]
+        //                     }
+        //                 }
+        //             );
+        //     }
+        //     catch
+        //     {
+        //         return Unauthorized(new
+        //         {
+        //             message = "Invalid Google token."
+        //         });
+        //     }
 
-            var user = await _userManager
-                .FindByEmailAsync(payload.Email);
+        //     var user = await _userManager
+        //         .FindByEmailAsync(payload.Email);
 
-            // Create new user
-            if (user == null)
-            {
-                user = new ApplicationUser
-                {
-                    UserName = payload.Email,
-                    Email = payload.Email,
-                    Name = payload.Name ?? "",
-                    Country = request.Country ?? "",
-                    PhoneNumber = request.PhoneNumber
-                };
+        //     // Create new user
+        //     if (user == null)
+        //     {
+        //         user = new ApplicationUser
+        //         {
+        //             UserName = payload.Email,
+        //             Email = payload.Email,
+        //             Name = payload.Name ?? "",
+        //             Country = request.Country ?? "",
+        //             PhoneNumber = request.PhoneNumber
+        //         };
 
-                var createResult = await _userManager
-                    .CreateAsync(user);
+        //         var createResult = await _userManager
+        //             .CreateAsync(user);
 
-                if (!createResult.Succeeded)
-                {
-                    return BadRequest(new
-                    {
-                        errors = createResult.Errors
-                            .Select(e => e.Description)
-                    });
-                }
+        //         if (!createResult.Succeeded)
+        //         {
+        //             return BadRequest(new
+        //             {
+        //                 errors = createResult.Errors
+        //                     .Select(e => e.Description)
+        //             });
+        //         }
 
-                await _userManager
-                    .AddToRoleAsync(user, "User");
-            }
+        //         await _userManager
+        //             .AddToRoleAsync(user, "User");
+        //     }
 
-            var token = await _jwtService
-                .GenerateToken(user);
+        //     var token = await _jwtService
+        //         .GenerateToken(user);
 
-            var roles = await _userManager
-                .GetRolesAsync(user);
+        //     var roles = await _userManager
+        //         .GetRolesAsync(user);
 
-            return Ok(new AuthResponse
-            {
-                Token = token,
-                UserId = user.Id,
-                Name = user.Name,
-                Email = user.Email!,
-                Role = roles.FirstOrDefault() ?? "User"
-            });
-        }
+        //     return Ok(new AuthResponse
+        //     {
+        //         Token = token,
+        //         UserId = user.Id,
+        //         Name = user.Name,
+        //         Email = user.Email!,
+        //         Role = roles.FirstOrDefault() ?? "User"
+        //     });
+        // }
     }
 }

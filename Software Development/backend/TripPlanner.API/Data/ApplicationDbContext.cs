@@ -13,5 +13,35 @@ namespace TripPlanner.API.Data
         }
 
         public DbSet<Destination> Destinations { get; set; }
+        public DbSet<Trip> Trips { get; set; }
+        public DbSet<TripImage> TripImages { get; set; }
+        public DbSet<TripRating> TripRatings { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<TripImage>()
+                .HasOne(image => image.Trip)
+                .WithMany(trip => trip.Images)
+                .HasForeignKey(image => image.TripId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<TripRating>()
+                .HasIndex(rating => new { rating.TripId, rating.UserId })
+                .IsUnique();
+
+            builder.Entity<TripRating>()
+                .HasOne(rating => rating.Trip)
+                .WithMany(trip => trip.Ratings)
+                .HasForeignKey(rating => rating.TripId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<TripRating>()
+                .HasOne<ApplicationUser>()
+                .WithMany()
+                .HasForeignKey(rating => rating.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

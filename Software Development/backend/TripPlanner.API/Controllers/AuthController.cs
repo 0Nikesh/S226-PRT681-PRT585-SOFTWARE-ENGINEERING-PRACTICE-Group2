@@ -1,4 +1,6 @@
+using System.Security.Claims;
 using Google.Apis.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TripPlanner.API.DTOs.Auth;
@@ -74,6 +76,8 @@ namespace TripPlanner.API.Controllers
                 UserId = user.Id,
                 Name = user.Name,
                 Email = user.Email!,
+                PhoneNumber = user.PhoneNumber,
+                Country = user.Country,
                 Role = "User"
             });
         }
@@ -122,6 +126,41 @@ namespace TripPlanner.API.Controllers
                 UserId = user.Id,
                 Name = user.Name,
                 Email = user.Email!,
+                PhoneNumber = user.PhoneNumber,
+                Country = user.Country,
+                Role = roles.FirstOrDefault() ?? "User"
+            });
+        }
+
+        // GET: api/auth/me
+        [Authorize]
+        [HttpGet("me")]
+        public async Task<IActionResult> Me()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+                ?? User.FindFirstValue("sub");
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized(new { message = "Sign in again to view your profile." });
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return Unauthorized(new { message = "Sign in again to view your profile." });
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return Ok(new AuthResponse
+            {
+                UserId = user.Id,
+                Name = user.Name,
+                Email = user.Email!,
+                PhoneNumber = user.PhoneNumber,
+                Country = user.Country,
                 Role = roles.FirstOrDefault() ?? "User"
             });
         }

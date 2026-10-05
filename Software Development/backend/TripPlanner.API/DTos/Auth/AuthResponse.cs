@@ -10,6 +10,10 @@ namespace TripPlanner.API.DTOs.Auth
 
         public string Email { get; set; } = string.Empty;
 
+        public string? PhoneNumber { get; set; }
+
+        public string Country { get; set; } = string.Empty;
+
         public string Role { get; set; } = string.Empty;
     }
 }

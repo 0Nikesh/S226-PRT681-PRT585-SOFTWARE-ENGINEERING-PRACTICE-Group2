@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
@@ -95,6 +96,7 @@ builder.Services
     })
     .AddJwtBearer(options =>
     {
+        options.MapInboundClaims = true;
         options.TokenValidationParameters =
             new TokenValidationParameters
             {
@@ -102,6 +104,8 @@ builder.Services
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
+                NameClaimType = ClaimTypes.NameIdentifier,
+                RoleClaimType = ClaimTypes.Role,
 
                 ValidIssuer =
                     builder.Configuration["Jwt:Issuer"],

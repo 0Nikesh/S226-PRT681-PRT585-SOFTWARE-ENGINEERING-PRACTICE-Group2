@@ -42,7 +42,7 @@ export default function Footer() {
           </h3>
 
           <div className="space-y-2 text-sm text-gray-400">
-            <p>hello@tripmate.com</p>
+            <p>contactTripMate@gmail.com</p>
             <p>+61 400 000 000</p>
           </div>
         </div>

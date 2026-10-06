@@ -253,8 +253,10 @@ static async Task SeedAdminAsync(
     // Create Admin Account
     // ----------------------------------------
 
-    var adminEmail = "admin@tripplanner.com";
-    var adminPassword = "Admin@123456";
+    var adminEmail = Environment.GetEnvironmentVariable("ADMIN_EMAIL")
+        ?? throw new InvalidOperationException("ADMIN_EMAIL environment variable not found. Check your .env file.");
+    var adminPassword = Environment.GetEnvironmentVariable("ADMIN_PASSWORD")
+        ?? throw new InvalidOperationException("ADMIN_PASSWORD environment variable not found. Check your .env file.");
 
 
     var admin =

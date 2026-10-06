@@ -29,6 +29,29 @@ namespace TripPlanner.API.Models
 
         public string? ImageUrl { get; set; }
 
+        public string MapsQuery { get; set; } = string.Empty;
+
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public List<DestinationHotel> Hotels { get; set; } = [];
+    }
+
+    public class DestinationHotel
+    {
+        public int Id { get; set; }
+
+        public int DestinationId { get; set; }
+
+        public string Name { get; set; } = string.Empty;
+
+        public string Area { get; set; } = string.Empty;
+
+        public decimal PricePerNight { get; set; }
+
+        public string Description { get; set; } = string.Empty;
+
+        public string MapsQuery { get; set; } = string.Empty;
+
+        public Destination Destination { get; set; } = null!;
     }
 }

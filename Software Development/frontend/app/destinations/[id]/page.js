@@ -19,8 +19,8 @@ const seasonStyles = {
 export default function DestinationDetailPage() {
   const params = useParams();
   const staticDestination = getDestinationById(params.id);
-  const [destination, setDestination] = useState(staticDestination);
-  const [status, setStatus] = useState(staticDestination ? "ready" : "loading");
+  const [destination, setDestination] = useState(null);
+  const [status, setStatus] = useState("loading");
 
   useEffect(() => {
     let active = true;
@@ -31,16 +31,16 @@ export default function DestinationDetailPage() {
           return;
         }
 
-        const local = staticDestination || localDetailsFor(remote?.name);
-
-        if (!remote && !local) {
+        if (!remote) {
           setStatus("missing");
           return;
         }
 
+        const local = staticDestination || localDetailsFor(remote.name);
+
         setDestination({
-          ...(remote || local),
-          overview: local?.overview || remote?.description || local?.description || "",
+          ...remote,
+          overview: local?.overview || remote.description || "",
           places: local?.places || [],
         });
         setStatus("ready");

@@ -9,7 +9,7 @@ public void User_ShouldRegister_WithValidInformation()
         .SendKeys("Test User");
 
     driver.FindElement(By.Id("email"))
-        .SendKeys("testuser123@example.com");
+        .SendKeys("testuser123@gmail.com");
 
     driver.FindElement(By.Id("phone"))
         .SendKeys("0412345678");

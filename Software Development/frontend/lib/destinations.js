@@ -232,21 +232,16 @@ export function localDetailsFor(name) {
 }
 
 export function mergeCatalog(posted) {
+  if (!Array.isArray(posted)) {
+    return [];
+  }
+
   const localByName = new Map(
     destinations.map((destination) => [destination.name.toLowerCase(), destination])
   );
 
-  if (!Array.isArray(posted) || posted.length === 0) {
-    return destinations;
-  }
-
-  const used = new Set();
-  const fromApi = posted.map((item) => {
+  return posted.map((item) => {
     const local = localByName.get(String(item.name || "").toLowerCase());
-
-    if (local) {
-      used.add(local.name.toLowerCase());
-    }
 
     return {
       ...(local || {}),
@@ -256,9 +251,6 @@ export function mergeCatalog(posted) {
       places: local?.places || [],
     };
   });
-
-  const missing = destinations.filter((destination) => !used.has(destination.name.toLowerCase()));
-  return [...fromApi, ...missing];
 }
 
 export function formatMoney(value) {

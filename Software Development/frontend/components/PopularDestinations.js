@@ -3,12 +3,10 @@
 import { useEffect, useState } from "react";
 import DestinationCard from "@/components/DestinationCard";
 import { getDestinations } from "@/lib/api";
-import { destinations, mergeCatalog } from "@/lib/destinations";
+import { mergeCatalog } from "@/lib/destinations";
 
 export default function PopularDestinations() {
-  const [popular, setPopular] = useState(() =>
-    [...destinations].sort((left, right) => right.averageVisitorsPerWeek - left.averageVisitorsPerWeek).slice(0, 4)
-  );
+  const [popular, setPopular] = useState([]);
 
   useEffect(() => {
     let active = true;

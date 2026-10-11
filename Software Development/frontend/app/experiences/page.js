@@ -7,7 +7,8 @@ import { createPortal } from "react-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/components/AuthProvider";
-import { destinations } from "@/lib/destinations";
+import { getDestinations } from "@/lib/api";
+import { mergeCatalog } from "@/lib/destinations";
 import { getSharedExperiences, sampleExperiences, saveSharedExperience } from "@/lib/experiences";
 
 function Stars({ value }) {
@@ -44,10 +45,31 @@ function ExperiencesPageContent() {
   const [error, setError] = useState("");
   const [loginOpen, setLoginOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [catalog, setCatalog] = useState([]);
 
   useEffect(() => {
     setMounted(true);
     setShared(getSharedExperiences());
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+
+    getDestinations()
+      .then((items) => {
+        if (active) {
+          setCatalog(mergeCatalog(items));
+        }
+      })
+      .catch(() => {
+        if (active) {
+          setCatalog([]);
+        }
+      });
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   const experiences = useMemo(
@@ -75,7 +97,7 @@ function ExperiencesPageContent() {
       return;
     }
 
-    const destination = destinations.find((item) => item.id === Number(destinationId));
+    const destination = catalog.find((item) => String(item.id) === String(destinationId));
 
     if (!destination) {
       setError("Choose a destination.");
@@ -188,7 +210,7 @@ function ExperiencesPageContent() {
               className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-sky-500"
             >
               <option value="">Choose a destination</option>
-              {destinations.map((destination) => (
+              {catalog.map((destination) => (
                 <option key={destination.id} value={destination.id}>
                   {destination.name}, {destination.country}
                 </option>

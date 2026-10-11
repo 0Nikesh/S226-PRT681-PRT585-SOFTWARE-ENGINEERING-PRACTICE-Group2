@@ -28,8 +28,8 @@ function validate(form) {
 
   if (!form.email.trim()) {
     errors.email = "Email is required.";
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-    errors.email = "Enter a valid email address.";
+  } else if (!/^[^\s@]+@gmail\.com$/i.test(form.email.trim())) {
+    errors.email = "Use a Gmail address ending in @gmail.com.";
   }
 
   if (!form.phone.trim()) {
@@ -170,6 +170,7 @@ function RegisterForm() {
             value={form.email}
             onChange={update("email")}
             className={inputClass}
+            placeholder="name@gmail.com"
           />
         </Field>
 

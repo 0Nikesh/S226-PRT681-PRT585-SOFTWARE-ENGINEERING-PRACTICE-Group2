@@ -45,7 +45,7 @@ function DestinationsContent() {
   const [minPrice, setMinPrice] = useState(searchParams.get("minPrice") || "");
   const [maxPrice, setMaxPrice] = useState(searchParams.get("maxPrice") || "");
   const [sort, setSort] = useState("visitors");
-  const [remote, setRemote] = useState([]);
+  const [remote, setRemote] = useState(null);
 
   useEffect(() => {
     setQuery(searchParams.get("q") || "");
@@ -78,7 +78,7 @@ function DestinationsContent() {
   }, []);
 
   const visible = useMemo(() => {
-    const catalog = mergeCatalog(remote);
+    const catalog = mergeCatalog(remote || []);
     const filtered = catalog.filter((destination) => {
       const seasonMatches = season === "All" || destination.bestSeason === season;
       return seasonMatches && matchesName(destination, query) && matchesPrice(destination, minPrice, maxPrice);
@@ -115,8 +115,10 @@ function DestinationsContent() {
             </p>
             <h1 className="mt-2 font-serif text-4xl font-semibold text-slate-900">Destinations</h1>
             <p className="mt-2 text-sm text-gray-500">
-              {visible.length} {visible.length === 1 ? "destination" : "destinations"}
-              {summary.length > 0 ? ` · ${summary.join(" · ")}` : ""}
+              {remote === null
+                ? "Loading destinations..."
+                : `${visible.length} ${visible.length === 1 ? "destination" : "destinations"}`}
+              {remote !== null && summary.length > 0 ? ` · ${summary.join(" · ")}` : ""}
             </p>
           </div>
         </div>
@@ -178,7 +180,7 @@ function DestinationsContent() {
           </div>
         </div>
 
-        {visible.length === 0 ? (
+        {remote !== null && visible.length === 0 ? (
           <p className="mt-8 text-sm text-gray-500">
             No destinations match this name, season, or price range.
           </p>

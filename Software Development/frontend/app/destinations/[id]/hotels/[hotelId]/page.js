@@ -23,9 +23,9 @@ export default function BookHotelPage() {
   const { user, ready } = useAuth();
   const staticDestination = getDestinationById(params.id);
   const staticHotel = getHotel(params.id, params.hotelId);
-  const [destination, setDestination] = useState(staticDestination);
-  const [hotel, setHotel] = useState(staticHotel);
-  const [status, setStatus] = useState(staticDestination && staticHotel ? "ready" : "loading");
+  const [destination, setDestination] = useState(null);
+  const [hotel, setHotel] = useState(null);
+  const [status, setStatus] = useState("loading");
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [guests, setGuests] = useState("2");
@@ -47,19 +47,23 @@ export default function BookHotelPage() {
           return;
         }
 
-        const local = staticDestination || localDetailsFor(remote?.name);
-        const nextDestination = remote || local;
-        const nextHotel =
-          (remote?.hotels || []).find((item) => String(item.id) === String(params.hotelId)) || staticHotel;
+        if (!remote) {
+          setStatus("missing");
+          return;
+        }
 
-        if (!nextDestination || !nextHotel) {
+        const local = staticDestination || localDetailsFor(remote.name);
+        const nextHotel =
+          (remote.hotels || []).find((item) => String(item.id) === String(params.hotelId)) || staticHotel;
+
+        if (!nextHotel) {
           setStatus("missing");
           return;
         }
 
         setDestination({
-          ...nextDestination,
-          overview: local?.overview || nextDestination.description || "",
+          ...remote,
+          overview: local?.overview || remote.description || "",
         });
         setHotel(nextHotel);
         setStatus("ready");
@@ -70,6 +74,8 @@ export default function BookHotelPage() {
         }
 
         if (staticDestination && staticHotel) {
+          setDestination(staticDestination);
+          setHotel(staticHotel);
           setStatus("ready");
           return;
         }

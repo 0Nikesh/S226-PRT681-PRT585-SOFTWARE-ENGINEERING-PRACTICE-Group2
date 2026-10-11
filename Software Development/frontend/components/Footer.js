@@ -32,7 +32,7 @@ export default function Footer() {
             <p>Sydney</p>
             <p>Melbourne</p>
             <p>Cairns</p>
-            <p>Perth</p>
+            <p>Hobart</p>
           </div>
         </div>
 

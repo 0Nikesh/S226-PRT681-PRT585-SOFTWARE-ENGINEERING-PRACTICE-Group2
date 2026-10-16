@@ -1,0 +1,17 @@
+WEEK 05
+
+Focus: MySQL Database (Backend)
+
+Contents:
+- Relational database concepts, tables, primary and foreign keys
+- Installing MySQL Server and MySQL Workbench
+- DDL and DML: CREATE, ALTER, DROP, INSERT, UPDATE, DELETE
+- SELECT queries, WHERE, ORDER BY, GROUP BY, HAVING
+- Joins (INNER, LEFT, RIGHT), subqueries, aggregate functions
+- Normalization, ER diagrams and database design
+- Indexes, views, stored procedures (basic)
+- Designing the database schema for the project
+
+Reference:
+- MySQL Reference Manual (dev.mysql.com/doc)
+- MySQL Workbench documentation

@@ -1,0 +1,14 @@
+WEEK 03
+
+Focus: C# and .NET Fundamentals (Backend)
+
+Contents:
+- C# syntax, data types, variables, operators, control flow (if/switch, loops)
+- Methods, arrays, collections (List, Dictionary), LINQ basics
+- Object-Oriented Programming: classes, objects, inheritance, polymorphism, encapsulation, abstraction, interfaces
+- Exception handling, async/await basics
+- Setting up the .NET SDK, Visual Studio / VS Code, creating console apps
+
+Reference:
+- Microsoft Learn - C# documentation (learn.microsoft.com/dotnet/csharp)
+- Microsoft Learn - .NET fundamentals

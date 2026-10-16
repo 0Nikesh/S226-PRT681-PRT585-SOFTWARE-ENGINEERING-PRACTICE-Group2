@@ -1,0 +1,14 @@
+WEEK 01
+
+Focus: Pathways to become dotnet developer
+
+Contents:
+To become a .NET developer we needs to learn the following key concepts
+1. Introduction to .NET framework
+2. Setting up the environment
+3. Object-Oriented Programming (C#)
+4. Database (Entity Framework, SQL Server)
+5. Web Development (ASP.NET MVC)
+6. Web Services (Web API)
+7. Architectural ideas & patterns
+All the above topics were discussed in surface level.

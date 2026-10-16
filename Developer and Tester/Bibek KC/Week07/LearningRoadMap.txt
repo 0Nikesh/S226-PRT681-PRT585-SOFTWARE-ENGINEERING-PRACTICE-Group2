@@ -1,0 +1,18 @@
+WEEK 07
+
+Focus: React (Frontend)
+
+Contents:
+- JavaScript ES6 essentials (arrow functions, destructuring, modules, promises, fetch)
+- React project setup (Vite / Create React App)
+- JSX, components (functional), props and state
+- Hooks: useState, useEffect, useContext, useRef
+- Event handling, forms and controlled components
+- Conditional rendering, lists and keys
+- React Router for page navigation
+- Consuming the .NET Web API using fetch / Axios
+- Styling with CSS / Bootstrap / Tailwind
+
+Reference:
+- React official documentation (react.dev)
+- MDN Web Docs - JavaScript

@@ -1,0 +1,16 @@
+WEEK 11
+
+Focus: Project Delivery
+
+Contents:
+- Completed and delivered the full project (developer and tester roles)
+- Backend: ASP.NET Core Web API with Entity Framework Core and MySQL
+- Frontend: React / Next.js user interface connected to the API
+- Testing: white box test cases, unit tests and Selenium automation scripts
+- Final bug fixes, code cleanup and documentation
+- Project demo and presentation, deployment / handover of source code
+- Feedback received and lessons learned
+
+Reference:
+- Project repository and documentation
+- Weeks 03 to 10 learning material

@@ -1,0 +1,16 @@
+WEEK 09
+
+Focus: Software Testing and White Box Testing (Tester)
+
+Contents:
+- Software testing fundamentals: SDLC, STLC, test plan, test case, test scenario
+- Types of testing: manual, functional, regression, smoke, sanity, integration
+- Bug life cycle and defect reporting
+- White box testing techniques: statement coverage, branch/decision coverage, condition coverage, path coverage, basis path testing, cyclomatic complexity
+- Unit testing for the .NET backend using xUnit / NUnit and Moq
+- Code coverage analysis and writing test cases for project modules
+
+Reference:
+- ISTQB Foundation Level syllabus (istqb.org)
+- Microsoft Learn - Unit testing in .NET
+- Software Testing Help / Guru99 tutorials on white box testing

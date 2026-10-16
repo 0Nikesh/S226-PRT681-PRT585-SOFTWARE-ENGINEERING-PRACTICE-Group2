@@ -1,0 +1,16 @@
+WEEK 08
+
+Focus: Next.js (Frontend)
+
+Contents:
+- Introduction to Next.js and difference from plain React
+- File-based routing, layouts and App Router
+- Server-side rendering (SSR), static site generation (SSG), client components vs server components
+- Data fetching and API integration with the backend
+- Dynamic routes, environment variables, image optimization
+- Authentication flow (login, token storage, protected routes)
+- Building the frontend screens for the project and integrating with the API
+
+Reference:
+- Next.js official documentation (nextjs.org/docs)
+- Next.js Learn course (nextjs.org/learn)

@@ -1,0 +1,17 @@
+WEEK 06
+
+Focus: Entity Framework Core (Backend)
+
+Contents:
+- ORM concepts and why Entity Framework Core is used
+- Connecting .NET to MySQL (Pomelo.EntityFrameworkCore.MySql provider)
+- DbContext, DbSet and entity models
+- Code-First approach and Migrations (add-migration, update-database)
+- Relationships: one-to-one, one-to-many, many-to-many
+- CRUD operations with LINQ, eager vs lazy loading (Include)
+- Data annotations and Fluent API
+- Connecting the Web API with the database; authentication with JWT (basic)
+
+Reference:
+- Microsoft Learn - Entity Framework Core documentation (learn.microsoft.com/ef/core)
+- Pomelo EF Core MySQL provider documentation (GitHub)

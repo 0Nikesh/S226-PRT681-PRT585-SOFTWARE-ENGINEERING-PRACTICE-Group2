@@ -1,0 +1,17 @@
+WEEK 10
+
+Focus: Selenium Automation Testing (Tester)
+
+Contents:
+- Introduction to test automation and Selenium WebDriver
+- Setting up Selenium with C# (NUnit) and browser drivers (ChromeDriver)
+- Locators: ID, Name, ClassName, CSS Selector, XPath
+- Web element actions, dropdowns, alerts, frames, windows
+- Implicit, explicit and fluent waits
+- Page Object Model (POM) design pattern
+- Test reports and running tests on the React/Next.js project
+- Final integration, bug fixing and preparation for project delivery
+
+Reference:
+- Selenium official documentation (selenium.dev/documentation)
+- Microsoft Learn - NUnit with .NET

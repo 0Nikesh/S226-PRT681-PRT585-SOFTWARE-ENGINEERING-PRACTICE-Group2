@@ -1,0 +1,17 @@
+WEEK 12
+
+Focus: Job Interview Preparation (Developer and Tester)
+
+Contents:
+- Revised C# and OOP concepts, ASP.NET Core Web API, REST, dependency injection
+- Revised MySQL queries, joins, normalization and Entity Framework Core (migrations, relationships)
+- Revised React and Next.js concepts (hooks, state, routing, SSR vs SSG)
+- Revised testing concepts: test cases, bug life cycle, white box techniques, Selenium locators, waits and POM
+- Practiced common interview questions and coding problems
+- Prepared project explanation (architecture, challenges, my contribution)
+- Updated resume, GitHub portfolio and LinkedIn profile
+- Mock interviews and HR/behavioral question practice
+
+Reference:
+- Notes and code from Weeks 03 to 11
+- Official documentation listed in previous weeks

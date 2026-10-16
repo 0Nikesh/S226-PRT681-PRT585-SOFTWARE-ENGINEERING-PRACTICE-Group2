@@ -1,0 +1,15 @@
+WEEK 04
+
+Focus: ASP.NET Core Web API (Backend)
+
+Contents:
+- Introduction to REST APIs and HTTP methods (GET, POST, PUT, DELETE)
+- Creating an ASP.NET Core Web API project
+- Controllers, routing, model binding and validation
+- Dependency Injection, services and the repository pattern
+- Middleware, configuration (appsettings.json), logging
+- Testing endpoints with Swagger and Postman
+- DTOs, status codes and global error handling
+
+Reference:
+- Microsoft Learn - ASP.NET Core Web API tutorials (learn.microsoft.com/aspnet/core)

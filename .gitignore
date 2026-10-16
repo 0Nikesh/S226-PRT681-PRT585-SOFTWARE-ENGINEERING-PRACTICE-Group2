@@ -61,3 +61,14 @@ node_modules/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+#env files
+.env
+
+# Locally uploaded trip images
+Software Development/backend/TripPlanner.API/wwwroot/uploads/
+Software Development/backend/TripPlanner.API/App_Data/DataProtection-Keys/
+
+#node-modules
+node_modules/
+package-lock.json

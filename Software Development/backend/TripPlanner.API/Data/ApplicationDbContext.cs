@@ -13,6 +13,7 @@ namespace TripPlanner.API.Data
         }
 
         public DbSet<Destination> Destinations { get; set; }
+        public DbSet<DestinationHotel> DestinationHotels { get; set; }
         public DbSet<Trip> Trips { get; set; }
         public DbSet<TripImage> TripImages { get; set; }
         public DbSet<TripRating> TripRatings { get; set; }
@@ -50,6 +51,20 @@ namespace TripPlanner.API.Data
                 entity.Property(destination => destination.BestSeason).HasMaxLength(40);
                 entity.Property(destination => destination.Description).HasMaxLength(1000);
                 entity.Property(destination => destination.ImageUrl).HasMaxLength(500);
+                entity.Property(destination => destination.MapsQuery).HasMaxLength(200);
+            });
+
+            builder.Entity<DestinationHotel>(entity =>
+            {
+                entity.Property(hotel => hotel.Name).HasMaxLength(150);
+                entity.Property(hotel => hotel.Area).HasMaxLength(100);
+                entity.Property(hotel => hotel.Description).HasMaxLength(1000);
+                entity.Property(hotel => hotel.MapsQuery).HasMaxLength(200);
+                entity.Property(hotel => hotel.PricePerNight).HasPrecision(18, 2);
+                entity.HasOne(hotel => hotel.Destination)
+                    .WithMany(destination => destination.Hotels)
+                    .HasForeignKey(hotel => hotel.DestinationId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }

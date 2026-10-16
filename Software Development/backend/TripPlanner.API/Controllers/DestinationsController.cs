@@ -25,6 +25,7 @@ namespace TripPlanner.API.Controllers
         {
             var destinations = await _context.Destinations
                 .AsNoTracking()
+                .Include(destination => destination.Hotels)
                 .OrderByDescending(destination => destination.AverageVisitorsPerWeek)
                 .ThenBy(destination => destination.Name)
                 .ToListAsync();
@@ -37,7 +38,8 @@ namespace TripPlanner.API.Controllers
         {
             var destination = await _context.Destinations
                 .AsNoTracking()
-                .SingleOrDefaultAsync(destination => destination.Id == id);
+                .Include(item => item.Hotels)
+                .SingleOrDefaultAsync(item => item.Id == id);
 
             if (destination is null)
             {
@@ -69,22 +71,9 @@ namespace TripPlanner.API.Controllers
 
             var averagePricePerDay = AveragePricePerDay(request.MinPrice, request.MaxPrice);
 
-            var destination = new Destination
-            {
-                Name = request.Name.Trim(),
-                Country = request.Country.Trim(),
-                Continent = request.Continent.Trim(),
-                DestinationTime = request.DestinationTime,
-                MinPrice = request.MinPrice,
-                MaxPrice = request.MaxPrice,
-                EstimatedCost = averagePricePerDay,
-                AverageVisitorsPerWeek = request.AverageVisitorsPerWeek,
-                BestSeason = season,
-                Description = request.Description.Trim(),
-                ImageUrl = string.IsNullOrWhiteSpace(request.ImageUrl)
-                    ? null
-                    : request.ImageUrl.Trim()
-            };
+            var destination = new Destination();
+            Apply(destination, request, season, averagePricePerDay);
+            destination.Hotels = MapHotels(request.Hotels);
 
             _context.Destinations.Add(destination);
             await _context.SaveChangesAsync();
@@ -93,6 +82,91 @@ namespace TripPlanner.API.Controllers
                 nameof(GetById),
                 new { id = destination.Id },
                 ToResponse(destination));
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(int id, CreateDestinationRequest request)
+        {
+            if (request.MaxPrice < request.MinPrice)
+            {
+                return BadRequest(new
+                {
+                    message = "Maximum price must be greater than or equal to minimum price."
+                });
+            }
+
+            if (!TryNormalizeSeason(request.BestSeason, out var season))
+            {
+                return BadRequest(new
+                {
+                    message = "Best season must be Spring, Summer, Autumn, or Winter."
+                });
+            }
+
+            var destination = await _context.Destinations
+                .Include(item => item.Hotels)
+                .SingleOrDefaultAsync(item => item.Id == id);
+
+            if (destination is null)
+            {
+                return NotFound(new { message = "Destination not found." });
+            }
+
+            Apply(destination, request, season, AveragePricePerDay(request.MinPrice, request.MaxPrice));
+            _context.DestinationHotels.RemoveRange(destination.Hotels);
+            destination.Hotels = MapHotels(request.Hotels);
+            await _context.SaveChangesAsync();
+
+            return Ok(ToResponse(destination));
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var destination = await _context.Destinations.FindAsync(id);
+
+            if (destination is null)
+            {
+                return NotFound(new { message = "Destination not found." });
+            }
+
+            _context.Destinations.Remove(destination);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private static void Apply(Destination destination, CreateDestinationRequest request, string season, decimal averagePricePerDay)
+        {
+            destination.Name = request.Name.Trim();
+            destination.Country = request.Country.Trim();
+            destination.Continent = request.Continent.Trim();
+            destination.DestinationTime = request.DestinationTime;
+            destination.MinPrice = request.MinPrice;
+            destination.MaxPrice = request.MaxPrice;
+            destination.EstimatedCost = averagePricePerDay;
+            destination.AverageVisitorsPerWeek = request.AverageVisitorsPerWeek;
+            destination.BestSeason = season;
+            destination.Description = request.Description.Trim();
+            destination.ImageUrl = string.IsNullOrWhiteSpace(request.ImageUrl) ? null : request.ImageUrl.Trim();
+            destination.MapsQuery = request.MapsQuery.Trim();
+        }
+
+        private static List<DestinationHotel> MapHotels(IEnumerable<HotelRequest>? hotels)
+        {
+            return (hotels ?? [])
+                .Where(hotel => !string.IsNullOrWhiteSpace(hotel.Name))
+                .Select(hotel => new DestinationHotel
+                {
+                    Name = hotel.Name.Trim(),
+                    Area = hotel.Area.Trim(),
+                    PricePerNight = hotel.PricePerNight,
+                    Description = hotel.Description.Trim(),
+                    MapsQuery = string.IsNullOrWhiteSpace(hotel.MapsQuery) ? hotel.Name.Trim() : hotel.MapsQuery.Trim()
+                })
+                .ToList();
         }
 
         public static decimal AveragePricePerDay(decimal minPrice, decimal maxPrice)
@@ -124,6 +198,16 @@ namespace TripPlanner.API.Controllers
                 BestSeason = destination.BestSeason,
                 Description = destination.Description,
                 ImageUrl = destination.ImageUrl,
+                MapsQuery = destination.MapsQuery,
+                Hotels = destination.Hotels.Select(hotel => new HotelResponse
+                {
+                    Id = hotel.Id,
+                    Name = hotel.Name,
+                    Area = hotel.Area,
+                    PricePerNight = hotel.PricePerNight,
+                    Description = hotel.Description,
+                    MapsQuery = hotel.MapsQuery
+                }).ToList(),
                 CreatedAt = destination.CreatedAt
             };
         }

@@ -26,6 +26,25 @@ namespace TripPlanner.API.DTOs.Destinations
 
         public string? ImageUrl { get; set; }
 
+        public string MapsQuery { get; set; } = string.Empty;
+
+        public List<HotelResponse> Hotels { get; set; } = [];
+
         public DateTime CreatedAt { get; set; }
+    }
+
+    public class HotelResponse
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; } = string.Empty;
+
+        public string Area { get; set; } = string.Empty;
+
+        public decimal PricePerNight { get; set; }
+
+        public string Description { get; set; } = string.Empty;
+
+        public string MapsQuery { get; set; } = string.Empty;
     }
 }

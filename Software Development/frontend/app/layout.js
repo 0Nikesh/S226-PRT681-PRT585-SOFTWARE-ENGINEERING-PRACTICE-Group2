@@ -1,3 +1,5 @@
+import { AuthProvider } from "@/components/AuthProvider";
+import { WatchlistProvider } from "@/components/WatchlistProvider";
 import "./globals.css";
 
 export const metadata = {
@@ -7,8 +9,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
+      <body suppressHydrationWarning>
+        <AuthProvider>
+          <WatchlistProvider>{children}</WatchlistProvider>
+        </AuthProvider>
+      </body>
     </html>
   );
 }

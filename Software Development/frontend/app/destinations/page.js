@@ -1,284 +1,214 @@
 "use client";
 
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import DestinationCard from "@/components/DestinationCard";
 import Footer from "@/components/Footer";
+import { getDestinations } from "@/lib/api";
+import { mergeCatalog } from "@/lib/destinations";
 
-const destinations = [
-  {
-    id: 1,
-    name: "Sydney",
-    country: "Australia",
-    image: "Sydney.jpg",
-    rating: 4.8,
-    price: 180,
-  },
-  {
-    id: 2,
-    name: "Melbourne",
-    country: "Australia",
-    image: "Melbourne.jpg",
-    rating: 4.7,
-    price: 160,
-  },
-  {
-    id: 3,
-    name: "Cairns",
-    country: "Australia",
-    image: "Cairns.jpg",
-    rating: 4.9,
-    price: 140,
-  },
-  {
-    id: 4,
-    name: "Perth",
-    country: "Australia",
-    image: "Perth.jpg",
-    rating: 4.6,
-    price: 150,
-  },
-  {
-    id: 5,
-    name: "Gold Coast",
-    country: "Australia",
-    image: "Goldcoast.jpg",
-    rating: 4.7,
-    price: 130,
-  },
-  {
-    id: 6,
-    name: "Hobart",
-    country: "Australia",
-    image: "Hobart.jpg",
-    rating: 4.8,
-    price: 145,
-  },
-];
+const seasons = ["All", "Spring", "Summer", "Autumn", "Winter"];
 
-export default function DestinationsPage() {
+function matchesName(destination, query) {
+  const name = query.trim().toLowerCase();
+
+  if (!name) {
+    return true;
+  }
+
+  return String(destination.name || "").toLowerCase().includes(name);
+}
+
+function matchesPrice(destination, minPrice, maxPrice) {
+  const low = Number(destination.minPrice);
+  const high = Number(destination.maxPrice);
+  const floor = minPrice === "" ? null : Number(minPrice);
+  const ceiling = maxPrice === "" ? null : Number(maxPrice);
+
+  if (floor !== null && Number.isFinite(floor) && high < floor) {
+    return false;
+  }
+
+  if (ceiling !== null && Number.isFinite(ceiling) && low > ceiling) {
+    return false;
+  }
+
+  return true;
+}
+
+function DestinationsContent() {
+  const searchParams = useSearchParams();
+  const requestedSeason = searchParams.get("season") || "All";
+  const [query, setQuery] = useState(searchParams.get("q") || "");
+  const [season, setSeason] = useState(seasons.includes(requestedSeason) ? requestedSeason : "All");
+  const [minPrice, setMinPrice] = useState(searchParams.get("minPrice") || "");
+  const [maxPrice, setMaxPrice] = useState(searchParams.get("maxPrice") || "");
+  const [sort, setSort] = useState("visitors");
+  const [remote, setRemote] = useState(null);
+
+  useEffect(() => {
+    setQuery(searchParams.get("q") || "");
+    const nextSeason = searchParams.get("season") || "All";
+    setSeason(seasons.includes(nextSeason) ? nextSeason : "All");
+    setMinPrice(searchParams.get("minPrice") || "");
+    setMaxPrice(searchParams.get("maxPrice") || "");
+  }, [searchParams]);
+
+  useEffect(() => {
+    let active = true;
+
+    getDestinations()
+      .then((items) => {
+        if (!active) {
+          return;
+        }
+
+        setRemote(items);
+      })
+      .catch(() => {
+        if (active) {
+          setRemote([]);
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const visible = useMemo(() => {
+    const catalog = mergeCatalog(remote || []);
+    const filtered = catalog.filter((destination) => {
+      const seasonMatches = season === "All" || destination.bestSeason === season;
+      return seasonMatches && matchesName(destination, query) && matchesPrice(destination, minPrice, maxPrice);
+    });
+
+    return [...filtered].sort((left, right) => {
+      if (sort === "price-asc") {
+        return Number(left.averagePricePerDay) - Number(right.averagePricePerDay);
+      }
+
+      if (sort === "price-desc") {
+        return Number(right.averagePricePerDay) - Number(left.averagePricePerDay);
+      }
+
+      return Number(right.averageVisitorsPerWeek) - Number(left.averageVisitorsPerWeek);
+    });
+  }, [maxPrice, minPrice, query, remote, season, sort]);
+
+  const summary = [
+    query.trim() ? query.trim() : "",
+    season !== "All" ? season : "",
+    minPrice !== "" || maxPrice !== "" ? `AUD $${minPrice || "0"}–AUD $${maxPrice || "any"} / day` : "",
+  ].filter(Boolean);
+
   return (
     <main>
-
       <Navbar />
 
-      {/* Search summary */}
-      <div className="border-b bg-white px-6 py-4">
-
-        <div className="mx-auto flex max-w-7xl items-center justify-between">
-
-          <p className="text-sm text-gray-600">
-            🔍 Australian destinations
-            <span className="mx-2">•</span>
-            82 destinations
-          </p>
-
-          <button className="rounded-lg border px-4 py-2 text-xs">
-            Modify Search
-          </button>
-
+      <section className="mx-auto max-w-7xl px-6 py-10">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-sky-600">
+              Plan by season and budget
+            </p>
+            <h1 className="mt-2 font-serif text-4xl font-semibold text-slate-900">Destinations</h1>
+            <p className="mt-2 text-sm text-gray-500">
+              {remote === null
+                ? "Loading destinations..."
+                : `${visible.length} ${visible.length === 1 ? "destination" : "destinations"}`}
+              {remote !== null && summary.length > 0 ? ` · ${summary.join(" · ")}` : ""}
+            </p>
+          </div>
         </div>
 
-      </div>
-
-      <section className="mx-auto grid max-w-7xl gap-8 px-6 py-10 lg:grid-cols-[240px_1fr]">
-
-        {/* Filter sidebar */}
-        <aside className="rounded-xl bg-white p-5 shadow-sm">
-
-          <h3 className="font-semibold">
-            Filters
-          </h3>
-
-          <div className="mt-6 border-b pb-5">
-
-            <p className="text-sm font-semibold">
-              Price Range
-            </p>
-
-            <input
-              type="range"
-              min="50"
-              max="500"
-              className="mt-4 w-full"
-            />
-
-            <div className="mt-2 flex justify-between text-xs text-gray-500">
-              <span>$50</span>
-              <span>$500+</span>
-            </div>
-
-          </div>
-
-          <div className="border-b py-5">
-
-            <p className="text-sm font-semibold">
-              Travel Type
-            </p>
-
-            <div className="mt-4 space-y-3 text-sm">
-
-              <label className="flex gap-2">
-                <input type="checkbox" />
-                Beach & Lagoon
-              </label>
-
-              <label className="flex gap-2">
-                <input type="checkbox" />
-                Mountain
-              </label>
-
-              <label className="flex gap-2">
-                <input type="checkbox" />
-                City Escape
-              </label>
-
-              <label className="flex gap-2">
-                <input type="checkbox" />
-                Cultural
-              </label>
-
-            </div>
-
-          </div>
-
-          <div className="border-b py-5">
-
-            <p className="text-sm font-semibold">
-              Rating
-            </p>
-
-            <div className="mt-4 space-y-3 text-sm">
-
-              <label className="flex gap-2">
-                <input type="checkbox" />
-                ★★★★★
-              </label>
-
-              <label className="flex gap-2">
-                <input type="checkbox" />
-                ★★★★☆
-              </label>
-
-              <label className="flex gap-2">
-                <input type="checkbox" />
-                ★★★☆☆
-              </label>
-
-            </div>
-
-          </div>
-
-          <div className="pt-5">
-
-            <p className="text-sm font-semibold">
-              Budget Tier
-            </p>
-
-            <div className="mt-4 space-y-3 text-sm">
-
-              <label className="flex gap-2">
-                <input type="checkbox" />
-                Budget
-              </label>
-
-              <label className="flex gap-2">
-                <input type="checkbox" />
-                Moderate
-              </label>
-
-              <label className="flex gap-2">
-                <input type="checkbox" />
-                Premium
-              </label>
-
-            </div>
-
-          </div>
-
-        </aside>
-
-        {/* Destination results */}
-        <div>
-
-          <div className="mb-5 flex items-center justify-between">
-
-            <p className="text-sm text-gray-600">
-              Showing destinations
-            </p>
-
-            <select className="rounded-lg border bg-white px-3 py-2 text-xs">
-              <option>Sort by Rating</option>
-              <option>Price: Low to High</option>
-              <option>Price: High to Low</option>
-            </select>
-
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-
-            {destinations.map((destination) => (
-              <DestinationCard
-                key={destination.id}
-                destination={destination}
-              />
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap gap-2">
+            {seasons.map((item) => (
+              <button
+                key={item}
+                type="button"
+                onClick={() => setSeason(item)}
+                className={`rounded-full px-3 py-1.5 text-sm ${
+                  season === item
+                    ? "bg-sky-500 text-white"
+                    : "bg-white text-gray-600 shadow-sm"
+                }`}
+              >
+                {item}
+              </button>
             ))}
-
           </div>
 
+          <div className="flex flex-wrap gap-3">
+            <input
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Destination name"
+              aria-label="Destination name"
+              className="rounded-lg border bg-white px-3 py-2 text-sm"
+            />
+            <input
+              type="number"
+              min="0"
+              value={minPrice}
+              onChange={(event) => setMinPrice(event.target.value)}
+              placeholder="Min AUD $"
+              aria-label="Minimum price per day in AUD"
+              className="w-28 rounded-lg border bg-white px-3 py-2 text-sm"
+            />
+            <input
+              type="number"
+              min="0"
+              value={maxPrice}
+              onChange={(event) => setMaxPrice(event.target.value)}
+              placeholder="Max AUD $"
+              aria-label="Maximum price per day in AUD"
+              className="w-28 rounded-lg border bg-white px-3 py-2 text-sm"
+            />
+            <select
+              value={sort}
+              onChange={(event) => setSort(event.target.value)}
+              className="rounded-lg border bg-white px-3 py-2 text-sm"
+            >
+              <option value="visitors">Most visitors</option>
+              <option value="price-asc">Average price: low to high</option>
+              <option value="price-desc">Average price: high to low</option>
+            </select>
+          </div>
         </div>
 
+        {remote !== null && visible.length === 0 ? (
+          <p className="mt-8 text-sm text-gray-500">
+            No destinations match this name, season, or price range.
+          </p>
+        ) : null}
+
+        <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {visible.map((destination) => (
+            <DestinationCard key={destination.id} destination={destination} />
+          ))}
+        </div>
       </section>
 
       <Footer />
-
     </main>
   );
 }
 
-// import Navbar from "@/components/Navbar";
-// import DestinationCard from "@/components/DestinationCard";
-// import Footer from "@/components/Footer";
-// import { getDestinations } from "@/lib/api";
-
-// export default async function DestinationsPage() {
-//   let destinations = [];
-
-//   try {
-//     const result = await getDestinations();
-
-//     destinations = result.data || [];
-//   } catch (error) {
-//     console.error("Error loading destinations:", error);
-//   }
-
-//   return (
-//     <main>
-//       <Navbar />
-
-//       <section className="mx-auto max-w-7xl px-6 py-10">
-
-//         <h1 className="mb-2 text-3xl font-semibold">
-//           Australian Destinations
-//         </h1>
-
-//         <p className="mb-8 text-gray-500">
-//           Explore destinations available in TripMate.
-//         </p>
-
-//         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-
-//           {destinations.map((destination) => (
-//             <DestinationCard
-//               key={destination.destination_id}
-//               destination={destination}
-//             />
-//           ))}
-
-//         </div>
-
-//       </section>
-
-//       <Footer />
-//     </main>
-//   );
-// } 
+export default function DestinationsPage() {
+  return (
+    <Suspense
+      fallback={
+        <main>
+          <Navbar />
+          <p className="px-6 py-16 text-center text-sm text-gray-500">Loading destinations...</p>
+        </main>
+      }
+    >
+      <DestinationsContent />
+    </Suspense>
+  );
+}
